@@ -17,4 +17,4 @@ class Converter:
         r = requests.get(f'https://api.exchangeratesapi.io/latest?base={currency[base]}&symbols={currency[quote]}')
         data = json.loads(r.content)['rates'][currency[quote]]
         result = round(float(data) * float(ammount), 3)
-        return result
+        return f'{result} {quote} в {ammount} {base}'
