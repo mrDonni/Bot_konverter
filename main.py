@@ -1,16 +1,36 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+import telebot
+import json
+import requests
+from config import TOKEN
+from extensions import Converter
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+bot = telebot.TeleBot(TOKEN)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+@bot.message_handler(commands=['hello'])
+def greeting(message):
+    bot.send_message(message.chat.id, f'Привет, {message.from_user.first_name}')
+
+@bot.message_handler(commands=['help','start'])
+def help(message: telebot.types.Message):
+    bot.send_message(message.chat.id, f'{message.from_user.first_name} , для \
+работы воспользуйтесь одним из методов , введите /values для списка доступных валют' )
+
+@bot.message_handler(commands=['values'])
+def values(message: telebot.types.Message):
+    text = 'Доступные валюты:'
+    for cur in currency.keys():
+        text = '\n'.join((text, cur, ))
+    bot.reply_to(message, text)
+
+@bot.message_handler(content_types=['text',])
+def convertion(message: telebot.types.Message):
+    user_input = list(map(str.lower, message.text.split(' ')))
+
+
+    bot.send_message(message.chat.id, Converter.get_price(user_input))
+
+
+
+bot.polling(none_stop = True)
