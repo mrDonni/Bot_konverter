@@ -1,4 +1,7 @@
 import telebot
+import json
+import requests
+
 
 
 TOKEN ='1411716058:AAGHLhlcxHb_9J1mCRyxZHGossI1hO00GWA'
@@ -13,20 +16,29 @@ def greeting(message):
 def help(message: telebot.types.Message):
     bot.send_message(message.chat.id, f'{message.from_user.first_name} , для \
 работы воспользуйтесь одним из методов , введите /values для списка доступных валют' )
+
 @bot.message_handler(commands=['values'])
 def values(message: telebot.types.Message):
     text = 'Доступные валюты:'
-    for key in currency.keys():
-        text = '\n'.join((text, key, ))
+    for cur in currency.keys():
+        text = '\n'.join((text, cur, ))
     bot.reply_to(message, text)
 
 @bot.message_handler(content_types=['text',])
 def convertion(message: telebot.types.Message):
+    user_input = list(map(str.lower, message.text.split(' ')))
+
+    r = requests.get(f'https://api.exchangeratesapi.io/latest?base={currency[base]}&symbols={currency[quote]}')
+    data = json.loads(r.content)['rates'][currency[quote]]
+    result =round(float(data) * float(ammount), 3)
+    bot.send_message(message.chat.id, result)
+
+
 
 currency = {
-    'Доллар': 'USD',
-    'Рубль': 'RUB',
-    'Евро': 'EUR'
+    'доллар': 'USD',
+    'рубль': 'RUB',
+    'евро': 'EUR'
 }
 
 
