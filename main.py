@@ -8,13 +8,13 @@ bot = telebot.TeleBot(TOKEN)
 def greeting(message):
     bot.send_message(message.chat.id, f'Привет, {message.from_user.first_name}')
 
-@bot.message_handler(commands=['help','start'])
+@bot.message_handler(commands=['help', 'start'])
 def help(message: telebot.types.Message):
     bot.send_message(message.chat.id, f'{message.from_user.first_name} , для \
 работы воспользуйтесь одним из методов\
  (пока работает только 1)\
-\n1)введите валюты в формате <валюта на которую меняют> <валюта которую меняют> <количество>\
- через пробел\
+\n1)введите валюты в формате <валюта на которую меняют>\
+ <валюта которую меняют> <количество> через пробел\
 \nВ групповых чатах команда начинается со знака /\
 \nВведите /values для списка доступных валют\
 \nВведите /hello для приветствия\
@@ -27,7 +27,7 @@ def values(message: telebot.types.Message):
         text = str.title('\n'.join((text, cur, )))
     bot.reply_to(message, text)
 
-@bot.message_handler(content_types=['text',])
+@bot.message_handler(content_types=['text'])
 def convertion(message: telebot.types.Message):
     try:
         a = message.text.replace('/','')
