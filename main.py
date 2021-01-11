@@ -1,12 +1,8 @@
 import telebot
-import json
-import requests
 from config import TOKEN, currency
 from extensions import Converter , APIException
 
-
 bot = telebot.TeleBot(TOKEN)
-
 
 @bot.message_handler(commands=['hello'])
 def greeting(message):
@@ -35,13 +31,13 @@ def convertion(message: telebot.types.Message):
         a = message.text.replace('/','')
         user_input = list(map(str.lower, a.split(' ')))
 
-
         bot.send_message(message.chat.id, Converter.get_price(user_input))
+
     except APIException as e:
         bot.reply_to(message, f'Ошибка пользователя \n{e}')
+
     except Exception as e:
         bot.reply_to(message,f' не удалось обработать команду\n{e}')
-
 
 
 bot.polling(none_stop = True)
