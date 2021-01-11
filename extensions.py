@@ -6,7 +6,6 @@ from config import  currency
 class APIException(BaseException):
     pass
 
-
 class Converter:
     @staticmethod
     def get_price(user_input):
@@ -29,4 +28,5 @@ class Converter:
         r = requests.get(f'https://api.exchangeratesapi.io/latest?base={currency[base]}&symbols={currency[quote]}')
         data = json.loads(r.content)['rates'][currency[quote]]
         result = round(float(data) * float(ammount), 2)
+
         return f'{ammount} {str.title(base)} равняется {result} {str.title(quote)}'
