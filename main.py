@@ -2,7 +2,7 @@ import telebot
 import json
 import requests
 from config import TOKEN, currency
-from extensions import Converter , Bot_exception
+from extensions import Converter , APIException
 
 
 bot = telebot.TeleBot(TOKEN)
@@ -37,7 +37,7 @@ def convertion(message: telebot.types.Message):
 
 
         bot.send_message(message.chat.id, Converter.get_price(user_input))
-    except Bot_exception as e:
+    except APIException as e:
         bot.reply_to(message, f'Ошибка пользователя \n{e}')
     except Exception as e:
         bot.reply_to(message,f' не удалось обработать команду\n{e}')
