@@ -1,4 +1,5 @@
 import telebot
+import time
 from config import TOKEN, currency
 from extensions import Converter , APIException
 
@@ -42,4 +43,11 @@ def convertion(message: telebot.types.Message):
         bot.reply_to(message,f' не удалось обработать команду\n{e}')
 
 
-bot.polling(none_stop = True)
+while True:
+    try:
+        bot.polling(none_stop = True)
+    except Exception as e:
+        print('BOt Error')
+        time.sleep(15)
+
+#bot.infinity_polling(True)
