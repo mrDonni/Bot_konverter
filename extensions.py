@@ -1,6 +1,6 @@
 import json
 import requests
-
+import time
 from config import  currency
 
 class APIException(BaseException):
@@ -24,9 +24,14 @@ class Converter:
             ammount = float(ammount)
         except ValueError:
             raise APIException(f'Неудалось обработать количество {ammount}')
+        try:
 
-        r = requests.get(f'https://api.exchangeratesapi.io/latest?base={currency[base]}&symbols={currency[quote]}')
-        data = json.loads(r.content)['rates'][currency[quote]]
-        result = round(float(data) * float(ammount), 2)
+            r = requests.get(f'https://api.exchangeratesapi.io/latest?base={currency[base]}&symbols={currency[quote]}')
+            data = json.loads(r.content)['rates'][currency[quote]]
+            result = round(float(data) * float(ammount), 2)
+        except (requests.exceptions.RequestException, ValueError) as e:
+            print('Error Caught!')
+            print(e)
+            time.sleep(3)
 
         return f'{ammount} {str.title(base)} равняется {result} {str.title(quote)}'
