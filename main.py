@@ -45,9 +45,10 @@ def convertion(message: telebot.types.Message):
 
 while True:
     try:
-        bot.polling(none_stop = True)
+        bot.infinity_polling(True)
     except Exception as e:
         print('BOt Error')
         time.sleep(15)
 
 #bot.infinity_polling(True)
+# bot.polling(none_stop = True)
